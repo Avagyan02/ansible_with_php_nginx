@@ -1,0 +1,6 @@
+- name: Развертывание веб-приложения
+  hosts: webservers  
+  become: yes
+  roles:  
+    - webserver
+    - database

@@ -1,0 +1,30 @@
+- name: Установить Docker
+  apt:
+    name: docker.io
+    state: present
+
+- name: Установить Docker Compose
+  get_url:
+    url: https://github.com/docker/compose/releases/download/1.29.2/docker-compose-Linux-x86_64
+    dest: /usr/local/bin/docker-compose
+    mode: 'u+x'
+
+- name: Копировать docker-compose.yml на сервер
+  copy:
+    src: docker-compose.yml
+    dest: /home/user/app/docker-compose.yml
+
+- name: Копировать Dockerfile для PHP
+  copy:
+    src: php/Dockerfile
+    dest: /home/user/app/php/Dockerfile
+
+- name: Сгенерировать конфигурационный файл для nginx
+  template:
+    src: nginx.conf.j2
+    dest: /home/user/app/nginx.conf
+
+- name: Запуск Docker Compose
+  command: docker-compose up -d
+  args:
+    chdir: /home/user/app
